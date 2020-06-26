@@ -16,4 +16,4 @@ spring:
     # 服务名称尽量用-,不要用_,不用特是字符
     name: content-center
 server:
-  port: 8083
+  port: 8084

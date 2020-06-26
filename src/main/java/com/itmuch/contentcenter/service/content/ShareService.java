@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,21 +35,22 @@ public class ShareService {
         //怎么调用用户微服务的users/userid
         //用户中心所有实例的信息
         List<ServiceInstance> instances=discoveryClient.getInstances("user-center");
-        String targetUrl = instances.stream()
+        List<String> targetUrls = instances.stream()
                 //数据变换
                 .map(instance->instance.getUri().toString()+"users/{id}" )
-                .findFirst()
-                .orElseThrow(()->new IllegalArgumentException("当前没有实例"));
+                .collect(Collectors.toList());
 
-        log.info("地址为:{}",targetUrl);
-        ResponseEntity<UserDTO> userDTO = this.restTemplate.getForEntity(
-                targetUrl,
+        int i= ThreadLocalRandom.current().nextInt(targetUrls.size());
+
+        log.info("地址为:{}",targetUrls.get(i));
+        UserDTO userDTO = this.restTemplate.getForObject(
+                targetUrls.get(i),
                 UserDTO.class,userId
         );
         //消息装配
         ShareDTO shareDTO = new ShareDTO();
         BeanUtils.copyProperties(share,shareDTO);
-        shareDTO.setWxNickname(userDTO.getBody().getWxNickname());
+        shareDTO.setWxNickname(userDTO.getWxNickname());
         return shareDTO;
 
     }
