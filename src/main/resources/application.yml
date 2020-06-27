@@ -16,4 +16,13 @@ spring:
     # 服务名称尽量用-,不要用_,不用特是字符
     name: content-center
 server:
-  port: 8084
+  port: 8082
+
+#user-center:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+ribbon:
+  eager-load:
+    enabled: true
+    clients: user-center

@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class ShareService {
     private final ShareMapper shareMapper;
     private final RestTemplate restTemplate;
-    private final DiscoveryClient discoveryClient;
     public ShareDTO findById(Integer id){
 
         //获取分享详情
@@ -33,18 +32,8 @@ public class ShareService {
         //发布人id
         Integer userId = share.getUserId();
         //怎么调用用户微服务的users/userid
-        //用户中心所有实例的信息
-        List<ServiceInstance> instances=discoveryClient.getInstances("user-center");
-        List<String> targetUrls = instances.stream()
-                //数据变换
-                .map(instance->instance.getUri().toString()+"users/{id}" )
-                .collect(Collectors.toList());
-
-        int i= ThreadLocalRandom.current().nextInt(targetUrls.size());
-
-        log.info("地址为:{}",targetUrls.get(i));
         UserDTO userDTO = this.restTemplate.getForObject(
-                targetUrls.get(i),
+                "http://user-center/users/{userId}",
                 UserDTO.class,userId
         );
         //消息装配
