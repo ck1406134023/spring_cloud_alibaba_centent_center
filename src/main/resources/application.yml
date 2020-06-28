@@ -12,9 +12,15 @@ spring:
       discovery:
         #指定nacos server的地址
         server-addr: localhost:8848
+    sentinel:
+      transport:
+        #指定sentinel 控制台地址
+        dashboard: localhost:8070
   application:
     # 服务名称尽量用-,不要用_,不用特是字符
     name: content-center
+  main:
+    allow-bean-definition-overriding: true
 server:
   port: 8082
 
@@ -26,3 +32,28 @@ ribbon:
   eager-load:
     enabled: true
     clients: user-center
+
+logging:
+  level:
+#    com.itmouch: debug
+    com.itmuch.contentcenter.feignclient.UserCenterFeignClient: debug
+
+feign:
+  client:
+    config:
+#      想要调用的微服务的名称
+#      user-center:
+#        loggerLever: full
+#      全局配置
+      default:
+        loggerLever: full
+  httpclient:
+    # 让feign使用apache httpclient 做请求；而不是默认的urlconnection
+    enabled: true
+    max-connections: 200
+    max-connections-per-route: 500
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -1,5 +1,6 @@
 package com.itmuch.contentcenter;
 
+import com.itmuch.contentcenter.configuration.GlobalFeignClientConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -14,7 +15,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  */ //扫描mybatis哪些包里的接口
 @MapperScan("com.itmuch")
 @SpringBootApplication
-@EnableFeignClients
+@EnableFeignClients //(defaultConfiguration = GlobalFeignClientConfiguration.class)
 public class ContentCenterApplication {
 
     public static void main(String[] args) {

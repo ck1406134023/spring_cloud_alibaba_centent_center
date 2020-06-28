@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * @author chenkai
  */
+//@FeignClient(name="user-center", configuration = UserCenterFeignClientConfiguration.class)
 @FeignClient(name="user-center")
 public interface UserCenterFeignClient {
 
